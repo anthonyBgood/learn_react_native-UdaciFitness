@@ -39,8 +39,8 @@ export function getMetricMetaInfo(metric){
           <View>
             <MaterialCommunityIcons
               name="bike"
-              color={'black'}
-              size={100}
+              color={orange}
+              size={35}
             />
           </View>
         )
@@ -73,10 +73,10 @@ export function getMetricMetaInfo(metric){
       getIcon(){
         return(
           <View>
-            <fontAwesome
+            <FontAwesome
               name="bed"
               color={'black'}
-              size={30}
+              size={35}
             />
           </View>
         )
