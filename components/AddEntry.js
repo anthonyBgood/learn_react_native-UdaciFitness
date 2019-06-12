@@ -4,6 +4,9 @@ import { getMetricMetaInfo, timeToString } from "../utils/helpers"
 import UdaciStepper from './UdaciStepper'
 import UdaciSlider from './UdaciSlider'
 import DateHeader from './DateHeader'
+//import TextButton from './TextButton'
+import { Ionicons } from '@expo/vector-icons'
+import TextButton from './TextButton'
 
 
 
@@ -87,11 +90,38 @@ export default class AddEntry extends Component {
     //Clear local notifications
   }
 
+  reset = () =>{
+
+    const key = timeToString()
+
+    //TODOS:
+      //Update Redux
+      // Navigate home
+      // Save to DB
+
+  
+  }
 
   render(){
 
 
     const metaInfo = getMetricMetaInfo();
+
+     if(this.props.alreadyLogged){
+      return(
+
+        <View>
+
+          <Ionicons name={'ios-happy'} size={100} /> 
+          <Text>
+            You have already completed this day
+          </Text>
+          <TextButton onPress={this.reset}>Reset</TextButton>
+
+        </View>
+
+      )
+    } 
 
 
     return(
