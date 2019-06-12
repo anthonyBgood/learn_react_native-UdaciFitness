@@ -1,8 +1,22 @@
 import React, { Component } from "react"
-import { View } from "react-native"
-import { getMetricMetaInfo } from "../utils/helpers"
+import { View, Text, TouchableOpacity } from "react-native"
+import { getMetricMetaInfo, timeToString } from "../utils/helpers"
 import UdaciStepper from './UdaciStepper'
 import UdaciSlider from './UdaciSlider'
+import DateHeader from './DateHeader'
+
+
+
+function SubmitBtn ({onPress}){
+  return (
+    <TouchableOpacity 
+      onPress={onPress}>
+      <Text>
+        SUBMIT
+      </Text>
+    </TouchableOpacity>
+  )
+}
 
 
 
@@ -54,6 +68,25 @@ export default class AddEntry extends Component {
     })
   }
 
+  submit =() => {
+    const key = timeToString()
+    const entry = this.state
+
+    this.setState(()=>({
+      run: 0 , 
+      bike: 0 ,
+      swim: 0 ,
+      eat: 0 ,
+      sleep: 0 , 
+    }))
+
+    //TODOS:
+    //Update Redux
+    // Navigate home
+    // Save to DB
+    //Clear local notifications
+  }
+
 
   render(){
 
@@ -63,6 +96,11 @@ export default class AddEntry extends Component {
 
     return(
       <View>
+
+
+        <DateHeader date = {(new Date()).toLocaleDateString()} />
+
+        <Text>{JSON.stringify(this.state)}</Text>
 
         {
           Object.keys(metaInfo).map((key) =>{
@@ -78,7 +116,7 @@ export default class AddEntry extends Component {
                   type === 'slider'
                   ? <UdaciSlider 
                       value={value}
-                      onChange={(value)=>this.slide(value,key)}
+                      onChange={(value)=>this.slide(key,value)}
                       {...rest}
                     />
                   : <UdaciStepper 
@@ -93,8 +131,8 @@ export default class AddEntry extends Component {
             )
 
           })
-        
         }
+        <SubmitBtn onPress={this.submit} />
 
       </View>
     )
