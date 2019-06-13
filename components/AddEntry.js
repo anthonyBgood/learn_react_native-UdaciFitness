@@ -7,6 +7,7 @@ import DateHeader from './DateHeader'
 //import TextButton from './TextButton'
 import { Ionicons } from '@expo/vector-icons'
 import TextButton from './TextButton'
+import { submitEntry, removeEntry } from '../utils/api'
 
 
 
@@ -83,10 +84,15 @@ export default class AddEntry extends Component {
       sleep: 0 , 
     }))
 
+
+
     //TODOS:
     //Update Redux
     // Navigate home
+
     // Save to DB
+    submitEntry({key,entry})
+
     //Clear local notifications
   }
 
@@ -97,7 +103,9 @@ export default class AddEntry extends Component {
     //TODOS:
       //Update Redux
       // Navigate home
+
       // Save to DB
+      removeEntry(key)
 
   
   }
