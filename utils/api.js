@@ -14,7 +14,7 @@ export function submitEntry ({key, entry}){
 }
 
 
-export function removeEntry(){
+export function removeEntry(key){
   return AsyncStorage.getItem(CALENDAR_STORAGE_KEY)
     .then((results => {
       const data = JSON.parse(results)

@@ -1,13 +1,15 @@
 import React, { Component } from "react"
 import { View, Text, TouchableOpacity } from "react-native"
-import { getMetricMetaInfo, timeToString } from "../utils/helpers"
+import { connect } from 'react-redux'
+
+import { getMetricMetaInfo, timeToString, getDailyReminderValue } from "../utils/helpers"
 import UdaciStepper from './UdaciStepper'
 import UdaciSlider from './UdaciSlider'
 import DateHeader from './DateHeader'
-//import TextButton from './TextButton'
 import { Ionicons } from '@expo/vector-icons'
 import TextButton from './TextButton'
 import { submitEntry, removeEntry } from '../utils/api'
+import { addEntry } from '../actions'
 
 
 
@@ -25,7 +27,7 @@ function SubmitBtn ({onPress}){
 
 
 
-export default class AddEntry extends Component {
+class AddEntry extends Component {
 
   state ={
     run: 0 , 
@@ -88,6 +90,10 @@ export default class AddEntry extends Component {
 
     //TODOS:
     //Update Redux
+    this.props.dispatch(addEntry({
+      [key]: entry
+    }))
+
     // Navigate home
 
     // Save to DB
@@ -102,6 +108,10 @@ export default class AddEntry extends Component {
 
     //TODOS:
       //Update Redux
+      this.props.dispatch(addEntry({
+        [key]: getDailyReminderValue()
+      }))
+
       // Navigate home
 
       // Save to DB
@@ -140,6 +150,8 @@ export default class AddEntry extends Component {
 
         <Text>{JSON.stringify(this.state)}</Text>
 
+        <SubmitBtn onPress={this.submit} />
+
         {
           Object.keys(metaInfo).map((key) =>{
             const { getIcon, type, ...rest } = metaInfo[key]
@@ -170,9 +182,23 @@ export default class AddEntry extends Component {
 
           })
         }
-        <SubmitBtn onPress={this.submit} />
+        
 
       </View>
     )
   }
 }
+
+
+function mapStateToProps(state){
+
+  const key =timeToString()
+
+  return {
+    alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+  }
+
+}
+
+
+export default connect(mapStateToProps)(AddEntry)
