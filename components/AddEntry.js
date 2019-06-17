@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, TouchableOpacity } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import { connect } from 'react-redux'
 
 import { getMetricMetaInfo, timeToString, getDailyReminderValue } from "../utils/helpers"
@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons'
 import TextButton from './TextButton'
 import { submitEntry, removeEntry } from '../utils/api'
 import { addEntry } from '../actions'
+
 
 
 
