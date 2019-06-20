@@ -1,62 +1,75 @@
 import React, { Component } from 'react'
-import {View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import  {receiveEntries, addEntry } from '../actions'
+import { receiveEntries, addEntry } from '../actions'
 import { timeToString, getDailyReminderValue } from '../utils/helpers'
-import { fetchCalendarResults } from '../utils/api' 
+import { fetchCalendarResults } from '../utils/api'
 import UdaciFitnessCalendar from 'udacifitness-calendar'
 import { white } from '../utils/colors'
 import DateHeader from './DateHeader'
+import MetricCard from './MetricCard'
+import { AppLoading } from 'expo'
 
 
 class History extends Component {
 
-  componentDidMount(){
+  state = {
+    ready : false ,
+  }
 
+
+  componentDidMount () {
     const { dispatch } = this.props
 
     fetchCalendarResults()
       .then((entries) => dispatch(receiveEntries(entries)))
       .then(({ entries }) => {
-        if(!entries[timeToString()]) {
+        if (!entries[timeToString()]) {
           dispatch(addEntry({
             [timeToString()]: getDailyReminderValue()
           }))
         }
       })
-      .then(() => this.setState(()=> ({ready: true})))
+      .then(() => this.setState(() => ({ready: true})))
   }
-
-  renderItem(){
-    renderItem = ({today, ...metrics }, formattedDate, key) => (
-      <View style ={styles.item}>
-        {today 
-          ? <Text>{JSON.stringify(today)}</Text>
-          : <Text>{JSON.stringify(metrics)}</Text>
-        
-        }
+  renderItem = ({ today, ...metrics }, formattedDate, key) => (
+    <View style={styles.item}>
+      {today
+        ? <View>
+            <DateHeader date={formattedDate}/>
+            <Text style={styles.noDataText}>
+              {today}
+            </Text>
+          </View>
+        : <TouchableOpacity
+            onPress={() => console.log('Pressed!')}
+          >
+              <MetricCard date ={formattedDate} metrics={metrics} />
+          </TouchableOpacity>
+      }
+    </View>
+  )
+  renderEmptyDate(formattedDate) {
+    return (
+      <View style={styles.item}>
+        <DateHeader date={formattedDate}/>
+        <Text style={styles.noDataText}>
+          You didn't log any data on this day.
+        </Text>
       </View>
     )
   }
-
-  renderEmptyDate (formattedDate) {
-    return(
-      <View>
-        <Text>No Data for this day</Text>
-      </View>
-    )
-  }
-
   render() {
-    const { entries } = this.props 
+    const { entries } = this.props
+    const { ready } = this.state
 
-    console.debug('debugging ENTRIES: ', typeof entries, Array.isArray(entries), 
-                                  Object.keys(entries).length)
+    if (ready === false){
+      return <AppLoading />
+    }
 
-
-    return(
-      <UdaciFitnessCalendar 
-        items={entries} 
+    return (
+      <UdaciFitnessCalendar
+        items={entries}
         renderItem={this.renderItem}
         renderEmptyDate={this.renderEmptyDate}
       />
@@ -89,12 +102,12 @@ const styles = StyleSheet.create({
 })
 
 
-
 function mapStateToProps (entries) {
   return {
     entries
   }
 }
 
-
-export default connect(mapStateToProps)(History)
+export default connect(
+  mapStateToProps,
+)(History)
