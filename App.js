@@ -7,10 +7,11 @@ import { View, Platform, StatusBar } from 'react-native';
 import reducer from './reducers'
 import AddEntry from './components/AddEntry'
 import History from './components/History'
-import { TabNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import {purple, white } from './utils/colors'
 import { Ionicons, FontAwesome } from '@expo/vector-icons'
 import { Constants } from 'expo'
+import EntryDetail from './components/EntryDetail'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
@@ -23,7 +24,7 @@ function UdaciStatusBar ({backgroundColor, ...props}) {
 const Tabs = TabNavigator({
 
   History:{
-    screen: () => <History/>,
+    screen: () => <History />,
     navigationOptions:{
       tabBarLabel: 'History',
       tabBarIcon: ({ tintColor}) => 
@@ -64,6 +65,23 @@ const Tabs = TabNavigator({
   }
 })
 
+const MainNavigator = StackNavigator({
+  Home:{
+    screen:Tabs,
+  },
+  EntryDetail:{
+    screen: EntryDetail, 
+    navigationOptions:{
+      headerTintColor: white, 
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  }
+})
+
+
+
 export default function App() {
   const store = createStore(reducer)
 
@@ -71,7 +89,7 @@ export default function App() {
     <Provider store={store}>
        <View style={{flex: 1}}>
           <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-          <Tabs />
+          <MainNavigator />
         </View>
     </Provider>
   );
