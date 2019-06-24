@@ -11,6 +11,8 @@ import TextButton from './TextButton'
 import { submitEntry, removeEntry } from '../utils/api'
 import { addEntry } from '../actions'
 import { purple, white } from '../utils/colors'
+import { NavigationActions } from 'react-navigation'
+import { withNavigation } from 'react-navigation'
 
 
 
@@ -97,6 +99,7 @@ class AddEntry extends Component {
     }))
 
     // Navigate home
+    this.toHome()
 
     // Save to DB
     submitEntry({key,entry})
@@ -115,11 +118,16 @@ class AddEntry extends Component {
       }))
 
       // Navigate home
+      this.toHome()
 
       // Save to DB
       removeEntry(key)
 
   
+  }
+
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({key: 'AddEntry'}))
   }
 
   render(){
@@ -251,4 +259,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps)(AddEntry)
+export default withNavigation(connect(mapStateToProps)(AddEntry))
