@@ -7,7 +7,8 @@ import MetricCard from './MetricCard'
 import { addEntry } from '../actions'
 import { removeEntry } from '../utils/api'
 import { timeToString, getDailyReminderValue } from '../utils/helpers';
-import { TextButton } from './TextButton'
+import TextButton from './TextButton'
+import {withNavigation } from 'react-navigation'
 
 
 class EntryDetail extends Component {
@@ -49,9 +50,9 @@ class EntryDetail extends Component {
           - {JSON.stringify(this.props.navigation.state.params.entryId)}
         </Text>
 
-        <Text onPress={this.reset} style={{margin:20}} >
+        <TextButton onPress={this.reset} style={{margin:20}} >
           RESET
-        </Text>
+        </TextButton>
 
 
       </View>
@@ -92,8 +93,8 @@ function mapDispatchToProps (dispatch, { navigation }){
 }
 
 
-export default connect(
+export default withNavigation(connect(
   mapStateToProps, 
   mapDispatchToProps)
-  (EntryDetail)
+  (EntryDetail))
 
