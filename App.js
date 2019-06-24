@@ -2,24 +2,33 @@ import React from 'react';
 import {createStore} from 'redux'
 import { Provider } from 'react-redux'
 
-import { View, Platform } from 'react-native';
+import { View, Platform, StatusBar } from 'react-native';
 
 import reducer from './reducers'
 import AddEntry from './components/AddEntry'
 import History from './components/History'
 import { TabNavigator } from 'react-navigation'
 import {purple, white } from './utils/colors'
-import {fontAwesome, Ionicons, FontAwesome } from '@expo/vector-icons'
+import { Ionicons, FontAwesome } from '@expo/vector-icons'
+import { Constants } from 'expo'
+
+function UdaciStatusBar ({backgroundColor, ...props}) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  )
+}
 
 const Tabs = TabNavigator({
 
   History:{
     screen: () => <History/>,
     navigationOptions:{
-      tabBarLabel: 'AddEntry',
+      tabBarLabel: 'History',
       tabBarIcon: ({ tintColor}) => 
             <Ionicons 
-              name='ios-bookmards' 
+              name='ios-bookmarks' 
               size={30}
               color={tintColor}/>
     } , 
@@ -60,11 +69,10 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <View style ={{flex: 1}}>
-        <View style ={{height: 20}} />
-        <Tabs /> 
-
-      </View>
+       <View style={{flex: 1}}>
+          <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
+          <Tabs />
+        </View>
     </Provider>
   );
 }
